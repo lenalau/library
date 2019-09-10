@@ -1,0 +1,18 @@
+<table class="table">
+
+    <tr>
+        <h1>Books</h1>
+    </tr>
+    {{#each books}}
+    <tr>
+
+        <th>
+            <a href="/books/{{this._id}}"> {{this.title}} : {{this.rating}}</a>
+        </th>
+        {{!-- <th> <a href="books/{{this._id}}"> {{this.title}} DETAILS</a></th> --}}
+        <th><a href="/books/edit?book_id={{this._id}}" class="edit-button">EDIT</a></th>
+        <th><a href="/books/delete?book_id={{this._id}}" class="delete-button">DELETE</a></th>
+
+    </tr>
+    {{/each}}
+</table>
