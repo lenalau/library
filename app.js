@@ -8,7 +8,7 @@ const session = require("express-session");
 const bcrypt = require("bcrypt");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
-
+const User = require("./models/user")
 
 
 const mongoose = require("mongoose")
@@ -47,8 +47,8 @@ passport.deserializeUser((id, cb) => {
   });
 });
 
-passport.use(new LocalStrategy((email, password, next) => {
-  User.findOne({ email }, (err, user) => {
+passport.use(new LocalStrategy((username, password, next) => {
+  User.findOne({ username }, (err, user) => {
     if (err) {
       return next(err);
     }
@@ -65,6 +65,21 @@ passport.use(new LocalStrategy((email, password, next) => {
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+mongoose.Promise = Promise;
+mongoose
+  .connect('mongodb://localhost/basic-auth', { useMongoClient: true })
+  .then(() => {
+    console.log('Connected to Mongo!')
+  }).catch(err => {
+    console.error('Error connecting to mongo', err)
+  });
+
+// ...other code
+
+// Routes
+const router = require("./routes/auth");
+app.use('/', router);
 
 app.use('/', indexRouter);
 app.use('/books', booksRouter);
